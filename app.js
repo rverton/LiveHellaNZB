@@ -1,6 +1,6 @@
-var http = require('http'),
-    , stack = require('stack'),
-    , creationix = require('creationix'),
+var http = require('http')
+    , stack = require('stack')
+    , creationix = require('creationix')
     , xmlrpc = require('xmlrpc');
 
 var client = xmlrpc.createClient({
