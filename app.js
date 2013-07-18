@@ -1,9 +1,14 @@
-var http = require('http');
-var stack = require('stack');
-var creationix = require('creationix');
-var xmlrpc = require('xmlrpc');
+var http = require('http'),
+    , stack = require('stack'),
+    , creationix = require('creationix'),
+    , xmlrpc = require('xmlrpc');
 
-var client = xmlrpc.createClient({ host: 'localhost', port: 8760, path: '/', basic_auth: {user: 'hellanzb', pass: 'changeme'}});
+var client = xmlrpc.createClient({
+  host: 'localhost',
+  port: 8760,
+  path: '/',
+  basic_auth: {user: 'hellanzb', pass: 'changeme'}
+});
 
 var vfs = require('vfs-local')({
   root: __dirname + "/public"
