@@ -1,0 +1,20 @@
+{
+  "name": "hellanzb-live",
+  "version": "0.0.0",
+  "description": "HellaNZB Live Graph",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "socket.io": "~0.9.14",
+    "stack": "~0.1.0",
+    "vfs-http-adapter": "~0.2.3",
+    "vfs-local": "~0.3.11",
+    "creationix": "~0.3.1",
+    "xmlrpc": "~1.1.0"
+  }
+}

@@ -1,0 +1,117 @@
+<html>
+<head>
+	<title>HellaNZB Live Graph</title>
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/jquery.flot.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<style>
+		.axisLabel {
+			position:absolute;
+			text-align:center;
+			font-size:14px;
+		}
+		.yaxisLabel {
+			top: 50%;
+			left:2px;
+
+			transform: rotate(-90deg);
+			-o-transform: rotate(-90deg);
+			-ms-transform: rotate(-90deg);
+			-moz-transform: rotate(-90deg);
+			-webkit-transform: rotate(-90deg);
+			transform-origin: 0 0;
+			-o-transform-origin: 0 0;
+			-ms-transform-origin: 0 0;
+			-moz-transform-origin: 0 0;
+			-webkit-transform-origin: 0 0;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="graph" style="width:800px;height:400px;margin:50px auto;"></div>
+
+	<script>
+		$(document).ready(function() {
+
+			var yaxisLabel = $("<div class='axisLabel yaxisLabel'>Kilobyte Per Second (kB/s)</div>");
+    	yaxisLabel.css("margin-top", yaxisLabel.width() / 2 + 50);
+
+			var max_data_points = 100;
+			var data = [];
+
+			var options = {
+				xaxis: {
+            tickFormatter: function () {
+                return "";
+            }
+        },
+        yaxis: {
+            min: 0,
+            max: 1000
+        },
+        legend: {
+          show: true
+        },
+        grid: {
+            borderWidth: 1,
+            minBorderMargin: 20,
+            labelMargin: 10,
+            backgroundColor: {
+                colors: ["#fff", "#e4f4f4"]
+            },
+            margin: {
+                top: 8,
+                bottom: 20,
+                left: 20
+            }
+        },
+			};
+
+			function initialData() {
+				for(var i = 0;i < max_data_points; ++i) {
+					data.push([i, 0]);
+				}
+        return data;
+    	}
+
+	    var series = [{
+        data: initialData(),
+        lines: {
+            fill: true
+        }
+    	}];
+
+			var socket = io.connect('http://localhost:8080');
+
+			var plot = $.plot($('#graph'), series, options);
+			$('#graph').append(yaxisLabel);
+
+	  	socket.on('status', function (res) {
+	  		data.push(res.rate);
+
+	  		if(data.length > max_data_points) {
+	  			data.shift();
+	  		}
+
+	  		var tmp = [];
+
+	  		for(var i = 0;i < data.length; i++) {
+	  			tmp.push([i, data[i]]);
+	  		}
+
+	  		series[0].data = tmp;
+
+	  		if(options.yaxis.max < res.rate) {
+	  			options.yaxis.max = res.rate * 1.1;
+	  			plot = $.plot($('#graph'), series, options);
+					$('#graph').append(yaxisLabel);
+	  		} else {
+		  		plot.setData(series);
+		  		plot.draw();
+	  		}
+	  	});
+	});
+	</script>
+</body>
+</html>
