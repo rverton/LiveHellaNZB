@@ -1,4 +1,4 @@
 Hellanzb Live Graph
 ===================
 
-Simple graph of hellanzb download rate.
+Simple webpage with a graph of the current hellanzb download rate based on node.js and socket.io.
